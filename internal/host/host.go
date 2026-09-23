@@ -74,3 +74,21 @@ func (h *Hosty) List() ([]*Host, error) {
 
 	return hosts, nil
 }
+
+func (h *Hosty) Forget(name string) error {
+	if err := h.config.Load(&h.hosts); err != nil {
+		return err
+	}
+
+	if _, exists := h.hosts[name]; !exists {
+		return fmt.Errorf("host %q does not exist", name)
+	}
+
+	delete(h.hosts, name)
+
+	if err := h.config.Save(h.hosts); err != nil {
+		return err
+	}
+
+	return nil
+}
