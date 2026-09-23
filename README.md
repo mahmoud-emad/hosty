@@ -1,3 +1,5 @@
+> This is a learning project. Instead of using `~/.ssh/config` or `/etc/hosts`, I wanted to build something myself and understand how things work behind the scenes.
+
 # Hosty
 
 Hosty is a small CLI tool for managing and connecting to remote machines using memorable names instead of IP addresses.
@@ -26,11 +28,12 @@ hosty connect studio
 hosty set <name> <ip>
 hosty get <name>
 hosty list
+hosty update <name>
 hosty forget <name>
 hosty connect <name>
 ```
 
-Hosty supports both IPv4 and IPv6 addresses, with support for usernames and ports.
+Hosty supports both IPv4 and IPv6 addresses, with optional usernames and SSH ports.
 
 ## Configuration
 
@@ -44,4 +47,4 @@ Hosty does not manage SSH keys or implement the SSH protocol itself. It uses the
 
 ## Status
 
-Hosty is currently a small learning project written in Go.
+Hosty is currently a small learning project written in Go, built to learn how CLI applications, configuration, networking concepts, and process execution work in practice.
