@@ -26,7 +26,10 @@ func (c *Config) Load(target any) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+
+	defer func() {
+		_ = file.Close()
+	}()
 
 	err = json.NewDecoder(file).Decode(target)
 	if errors.Is(err, io.EOF) {
@@ -45,7 +48,12 @@ func (c *Config) Save(source any) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+
+	defer func() {
+		if closeErr := file.Close(); err == nil {
+			err = closeErr
+		}
+	}()
 
 	return json.NewEncoder(file).Encode(source)
 }
