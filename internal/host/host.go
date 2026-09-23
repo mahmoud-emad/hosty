@@ -60,3 +60,17 @@ func (h *Hosty) Get(Name string) (*Host, error) {
 
 	return nil, fmt.Errorf("host %q does not exists", Name)
 }
+
+func (h *Hosty) List() ([]*Host, error) {
+	if err := h.config.Load(&h.hosts); err != nil {
+		return nil, err
+	}
+
+	hosts := make([]*Host, 0, len(h.hosts))
+
+	for _, host := range h.hosts {
+		hosts = append(hosts, host)
+	}
+
+	return hosts, nil
+}

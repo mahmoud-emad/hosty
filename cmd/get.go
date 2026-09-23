@@ -32,7 +32,7 @@ func getHost(name string) error {
 	}
 
 	user := "-"
-	if len(h.User) > 0 {
+	if h.User != "" {
 		user = h.User
 	}
 
