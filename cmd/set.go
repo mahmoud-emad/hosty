@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/mahmoud-emad/hosty/internal/host"
@@ -54,10 +53,7 @@ func setHost(name, ip, user string, port int) error {
 		displayPort = strconv.Itoa(h.Port)
 	}
 
-	fmt.Printf("Name:    %s\n", h.Name)
-	fmt.Printf("Address: %s\n", h.Address)
-	fmt.Printf("Port:    %s\n", displayPort)
-	fmt.Printf("User:    %s\n", displayUser)
-
+	printHeader()
+	printHost(h.Name, h.Address, displayPort, displayUser)
 	return nil
 }
