@@ -3,7 +3,9 @@ package host
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strconv"
 
 	"github.com/mahmoud-emad/hosty/internal/config"
 )
@@ -127,4 +129,37 @@ func (h *Hosty) Update(oldName, newName, newAddress, newUser string, newPort int
 	}
 
 	return host, nil
+}
+
+func (h *Hosty) Connect(name string) error {
+	if err := h.config.Load(&h.hosts); err != nil {
+		return err
+	}
+
+	host, exists := h.hosts[name]
+	if !exists {
+		return fmt.Errorf("host %q does not exist", name)
+	}
+
+	args := []string{}
+
+	if host.Port > 0 {
+		args = append(args, "-p", strconv.Itoa(host.Port))
+	}
+
+	target := host.Address
+
+	if host.User != "" {
+		target = fmt.Sprintf("%s@%s", host.User, host.Address)
+	}
+
+	args = append(args, target)
+	fmt.Println("Connecting host", host.Address)
+
+	cmd := exec.Command("ssh", args...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }
