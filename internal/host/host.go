@@ -92,3 +92,39 @@ func (h *Hosty) Forget(name string) error {
 
 	return nil
 }
+
+func (h *Hosty) Update(oldName, newName, newAddress, newUser string, newPort int) (*Host, error) {
+	if err := h.config.Load(&h.hosts); err != nil {
+		return nil, err
+	}
+
+	host, exists := h.hosts[oldName]
+	if !exists {
+		return nil, fmt.Errorf("host %q does not exist", oldName)
+	}
+
+	if newName != "" {
+		delete(h.hosts, oldName)
+
+		host.Name = newName
+		h.hosts[newName] = host
+	}
+
+	if newAddress != "" {
+		host.Address = newAddress
+	}
+
+	if newUser != "" {
+		host.User = newUser
+	}
+
+	if newPort != 0 {
+		host.Port = newPort
+	}
+
+	if err := h.config.Save(h.hosts); err != nil {
+		return nil, err
+	}
+
+	return host, nil
+}
